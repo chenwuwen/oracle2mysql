@@ -7,12 +7,14 @@ from core.mysql.mysql_core import insertJLX, insertRoom, insertJZW
 
 oracle_username = 'wuwen'
 oracle_password = 'wuwen'
-oracle_host = '127.0.0.1'
+oracle_host = '192.168.43.17'
 
 oracle_port = 1521
 oracle_dbname = 'orcl'
 
 oracle_cursor = None
+
+oracle_conn = None
 
 base_dir = os.path.dirname(__file__) + "/"
 
@@ -23,9 +25,10 @@ log_name = "log.txt"
 def oracle_connection():
     dsn = cx_Oracle.makedsn(oracle_host, oracle_port, oracle_dbname)
     print("Oracle 链接 dsn为 %s" % (dsn))
-    conn = cx_Oracle.connect(oracle_username, oracle_password, dsn)
+    global oracle_conn
+    oracle_conn = cx_Oracle.connect(oracle_username, oracle_password, dsn)
     global oracle_cursor
-    oracle_cursor = conn.cursor()
+    oracle_cursor = oracle_conn.cursor()
 
 
 def select():
@@ -38,6 +41,9 @@ def select():
     while True:
         result = oracle_cursor.fetchone()
         if not result:
+            print("=====完成========")
+            oracle_cursor.close()
+            oracle_conn.close()
             break
 
         src_dic = {'PCSDM': result[0], 'PCSMC': result[1], 'JWHDM': result[2], 'JWHMC': result[3], 'DZYSQX': result[4],
@@ -67,7 +73,7 @@ def select():
         except Exception as e:
             print(e)
             error_count += 1
-            log(src_dic)
+            log(src_dic, e)
 
         finally:
 
@@ -83,10 +89,10 @@ def select():
 def log(dic):
     with open(base_dir + log_name, 'w+', encoding='utf-8') as data:
         now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        log = []
+        item = []
         for key, val in dic.items():
-            log.append(" " + key + ":" + str(val) + " ")
-        content = now + "\t"  '\t'.join(log) + "\n"
+            item.append(" " + key + ":" + str(val) + " ")
+        content = now + "\t"  '\t'.join(item) + "\n"
         data.writelines(content)
 
 

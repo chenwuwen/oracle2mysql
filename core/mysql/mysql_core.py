@@ -37,8 +37,11 @@ def insertJLX(dic):
                 VALUES (%(jlxmc)s,%(jlxdm)s,%(dzysqx)s,%(pcsdm)s,%(pcsmc)s,
                 %(sssq_dm)s,%(sssq_mc)s,'F',%(now)s,%(jwhdm)s,%(jwhmc)s,%(jwzrqdm)s,%(jwzrqmc)s) '''
 
-    mysql_cursor.execute(insert_sql, dic)
-    mysql_conn.commit()
+    sql = insert_sql % (dic)
+    print("完整的SQL：" + sql)
+    # 其实我倒是觉得如果执行失败，可以把这条sql存到文件里
+    # mysql_cursor.execute(insert_sql, dic)
+    # mysql_conn.commit()
 
 
 def insertJZW(dic):
@@ -56,8 +59,10 @@ def insertJZW(dic):
                                 jwh_mc,jzw_bm,jzw_dizhi,jzw_jlxdm,jzw_jlxmc,pcsdm,pcsmc,sssq_dm,sssq_mc)
                                 VALUES (%(ds_cs)s,%(ds_dys)s,%(ds_hs)s,%(dx_cs)s,%(dx_dys)s,%(dx_hs)s,%(now)s,'F',%(jwh_dm)s,
                                 %(jwh_mc)s,%(jzw_bm)s,%(jzw_dizhi)s,%(jzw_jlxdm)s,%(jzw_jlxmc)s,%(pcsdm)s,%(pcsmc)s,%(sssq_dm)s,%(sssq_mc)s) '''
-    mysql_cursor.execute(insert_sql, dic)
-    mysql_conn.commit()
+    sql = insert_sql % (dic)
+    print("完整的SQL：" + sql)
+    # mysql_cursor.execute(insert_sql, dic)
+    # mysql_conn.commit()
 
 
 # 房间表插入
@@ -73,8 +78,10 @@ def insertRoom(dic):
     dic['now'] = now
     insert_sql = ''' insert into t_jzw_fangjian (jzw_dm,hu_id,jzw_dizhi,dys,cs,hs,humc,fjlx,whsj,is_del,renshu_ldrk,renshu_rhfl,renshu_hjrk)
                     VALUES (%(jzw_dm)s,%(hu_id)s,%(jzw_dizhi)s,%(dys)s,%(cs)s,%(hs)s,%(humc)s,'P',%(now)s,'F',0,0,0) '''
-    mysql_cursor.execute(insert_sql, dic)
-    mysql_conn.commit()
+    sql = insert_sql % (dic)
+    print("完整的SQL：" + sql)
+    # mysql_cursor.execute(insert_sql, dic)
+    # mysql_conn.commit()
 
 
 if __name__ == '__main__':
